@@ -1,3 +1,5 @@
 {
-  "port": ":8080"
+  "port": ":9090",
+  "grpc_port": ":9091",
+  "redis_addr": "redis:6379"
 }

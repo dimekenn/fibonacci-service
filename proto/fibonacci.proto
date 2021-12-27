@@ -1,0 +1,16 @@
+syntax="proto3";
+package proto;
+option go_package="proto/";
+
+service FibonacciService{
+  rpc GetFibonacciSlice(GetFibonacciSliceReq) returns (GetFibonacciSliceRes){}
+}
+
+message GetFibonacciSliceReq{
+  uint64 x = 1;
+  uint64 y = 2;
+}
+
+message GetFibonacciSliceRes{
+  repeated string res = 1;
+}

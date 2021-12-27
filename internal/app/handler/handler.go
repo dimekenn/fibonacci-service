@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"context"
 	"fibonacciService/internal/app/service"
+	"fibonacciService/proto"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/gommon/log"
 	"net/http"
@@ -26,12 +28,24 @@ func (h *Handler) GetFibonacci(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, "cannot parse params")
 	}
 	log.Infof("new request x = %d, y = %d", from, to)
-	res, serErr := h.service.GetFibonacciList(uint64(from), uint64(to))
+	res, serErr := h.service.GetFibonacciList(c.Request().Context(), uint64(from), uint64(to))
 	if serErr != nil{
 		log.Errorf("failed to calculate fibonacci: %v", serErr)
 		return serErr
 	}
 	log.Infof("Success response: %v", res)
 	return c.JSON(http.StatusOK, res)
+}
+
+func (h *Handler) GetFibonacciSlice(ctx context.Context, req *proto.GetFibonacciSliceReq) (*proto.GetFibonacciSliceRes, error) {
+	log.Infof("new request on GRPC server x = %d, y = %d", req.X, req.Y)
+	fibSlice, err := h.service.GetFibonacciList(ctx, req.X, req.Y)
+	if err != nil{
+		log.Errorf("failed to calculate fibonacci on GRPC server: %v", err)
+		return nil, err
+	}
+	res:=&proto.GetFibonacciSliceRes{Res: fibSlice.FibonacciSlice}
+	log.Infof("Success response on GRPC server: %v", fibSlice)
+	return res, nil
 }
 
