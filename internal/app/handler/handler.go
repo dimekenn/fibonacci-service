@@ -25,7 +25,8 @@ func (h *Handler) GetFibonacci(c echo.Context) error {
 		log.Errorf("failed to parse params: %v", err)
 		return echo.NewHTTPError(http.StatusBadRequest, "cannot parse params")
 	}
-	res, serErr := h.service.GetFibonacciList(from, to)
+	log.Infof("new request x = %d, y = %d", from, to)
+	res, serErr := h.service.GetFibonacciList(uint64(from), uint64(to))
 	if serErr != nil{
 		log.Errorf("failed to calculate fibonacci: %v", serErr)
 		return serErr
@@ -33,3 +34,4 @@ func (h *Handler) GetFibonacci(c echo.Context) error {
 	log.Infof("Success response: %v", res)
 	return c.JSON(http.StatusOK, res)
 }
+

@@ -1,5 +1,5 @@
 package models
 
 type FibResponse struct {
-	FibonacciSlice []int `json:"fibonacci_slice"`
+	FibonacciSlice []uint64 `json:"fibonacci_slice"`
 }
